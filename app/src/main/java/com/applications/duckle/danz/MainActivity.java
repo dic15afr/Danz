@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
+    public static final String SONG_NAME = "com.example.duckle.danz.MESSAGE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -14,7 +15,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void play(View v){
-        startActivity(new Intent(this, Play.class));
+        Intent intent = new Intent(this, Play.class);
+        String songName = "Chicken Dance";
+        intent.putExtra(SONG_NAME, songName);
+        startActivity(intent);
     }
 
     public void test(View v){
