@@ -50,4 +50,23 @@
         app:layout_constraintStart_toStartOf="@+id/text_x"
         app:layout_constraintTop_toBottomOf="@+id/text_y" />
 
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="106dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="256dp"
+        android:text="Are we shaking?"
+        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_shake"
+        android:layout_width="79dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
 </android.support.constraint.ConstraintLayout>
