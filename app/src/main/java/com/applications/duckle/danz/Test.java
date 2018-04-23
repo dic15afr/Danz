@@ -1,11 +1,14 @@
 package com.applications.duckle.danz;
 
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class Test extends AppCompatActivity implements SensorEventListener {
@@ -15,9 +18,11 @@ public class Test extends AppCompatActivity implements SensorEventListener {
     private Sensor acc_sensors;
     private float [] acc_values;
     TextView xText, yText, zText, shakeText;
+    ImageView shakeIndicator;
     private long lastUpdate;
     private final int SHAKE_THRESHOLD = 800;
     float last_x, last_y, last_z;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,11 +34,12 @@ public class Test extends AppCompatActivity implements SensorEventListener {
         yText = (TextView) findViewById(R.id.text_y);
         zText = (TextView) findViewById(R.id.text_z);
         shakeText = (TextView) findViewById(R.id.text_shake);
-        mSensorManager.registerListener(this, acc_sensors, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, acc_sensors, SensorManager.SENSOR_DELAY_GAME);
         lastUpdate = System.currentTimeMillis();
         last_x = 0;
         last_y = 0;
         last_z = 0;
+        shakeIndicator = (ImageView) findViewById(R.id.indicator_shake);
     }
 
 
@@ -60,8 +66,10 @@ public class Test extends AppCompatActivity implements SensorEventListener {
 
             if (speed > SHAKE_THRESHOLD) {
                 shakeText.setText("Shaking");
+                shakeIndicator.setImageResource(R.drawable.red);
             } else {
                 shakeText.setText("Not shaking");
+                shakeIndicator.setImageResource(R.drawable.white);
             }
             last_x = x;
             last_y = y;
@@ -94,7 +102,7 @@ public class Test extends AppCompatActivity implements SensorEventListener {
     @Override
     protected void onResume() {
         super.onResume();
-        mSensorManager.registerListener(this, acc_sensors, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, acc_sensors, SensorManager.SENSOR_DELAY_GAME);
     }
 
     /**
