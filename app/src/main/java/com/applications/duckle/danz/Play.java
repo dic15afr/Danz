@@ -9,23 +9,37 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class Play extends AppCompatActivity {
+import java.util.Observable;
+import java.util.Observer;
+
+public class Play extends AppCompatActivity implements Observer{
     private MediaPlayer mediaPlayer;
     private MediaObserver observer = null;
     private ProgressBar progressBar;
     private ImageChanger imageChanger;
     private ImageView image;
+    private Song song;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
-        mediaPlayer = MediaPlayer.create(this, R.raw.birddance);
-
         Intent intent = getIntent();
 
         String songName = intent.getStringExtra(MainActivity.SONG_NAME);
+        switch (songName){
+            case "Chicken Dance":
+                song = new ChickenDanceSong(this);
+                break;
+            default:
+                System.exit(0);
+        }
+
+        mediaPlayer = song.mediaPlayer();
+
+        new Thread(song).start();
+
         TextView songNameTextView = findViewById(R.id.songName);
         songNameTextView.setText(songName);
         progressBar = findViewById(R.id.progressBar);
@@ -59,7 +73,14 @@ public class Play extends AppCompatActivity {
     }
 
     public void pauseBtn(View v){
-        mediaPlayer.pause();
+        if(mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+        }
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        System.out.println("New move: " + arg);
     }
 
     private class MediaObserver implements Runnable {
