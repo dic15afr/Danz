@@ -100,23 +100,19 @@ public class Play extends AppCompatActivity implements Observer{
         int move = R.raw.leftright;
         switch ((int) arg){
             case 0:
-                move = R.raw.leftright;
                 break;
             case 1:
-                move = R.raw.updown;
+                move = R.raw.wave;
                 break;
             case 2:
-                move = R.raw.leftright;
-                break;
-            case 3:
                 move = R.raw.updown;
                 break;
-            case 4:
+            case 3:
                 move = R.raw.leftright;
                 break;
-            default:
+            case 4:
+                move = R.raw.forback;
                 break;
-
 
         }
         final Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+move); //Declare your url here.
