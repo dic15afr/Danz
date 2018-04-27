@@ -71,20 +71,22 @@ public class Test extends AppCompatActivity implements SensorEventListener {
             float y_speed = Math.abs(y - last_y) / diffTime * 10000;
             float z_speed = Math.abs(z - last_z) / diffTime * 10000;
 
+            float max = Math.max(x_speed, y_speed);
+            max = Math.max(max, z_speed);
 
-            if (x_speed > SHAKE_THRESHOLD) {
+
+            if (x_speed > SHAKE_THRESHOLD && x_speed == max) {
                 shakeText.setText("Shaking left right");
                 backGround.setBackgroundColor(Color.RED);
-            } else if (y_speed > SHAKE_THRESHOLD) {
+            } else if (y_speed > SHAKE_THRESHOLD && y_speed == max) {
                 shakeText.setText("Shaking up down");
                 backGround.setBackgroundColor(Color.GREEN);
-            }  else if (z_speed > SHAKE_THRESHOLD) {
+            }  else if (z_speed > SHAKE_THRESHOLD && z_speed == max) {
                 shakeText.setText("Shaking forward backward");
                 backGround.setBackgroundColor(Color.BLUE);
-            }
-            else {
+            } else {
                 shakeText.setText("Not shaking");
-                shakeIndicator.setImageResource(R.drawable.white);
+                backGround.setBackgroundColor(Color.WHITE);
             }
             last_x = x;
             last_y = y;
