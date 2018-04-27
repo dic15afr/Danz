@@ -8,6 +8,7 @@ import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,9 +20,11 @@ public class Test extends AppCompatActivity implements SensorEventListener {
     private float [] acc_values;
     TextView xText, yText, zText, shakeText;
     ImageView shakeIndicator;
+    LinearLayout backGround;
     private long lastUpdate;
     private final int SHAKE_THRESHOLD = 800;
     float last_x, last_y, last_z;
+    private int move;
 
 
     @Override
@@ -40,6 +43,8 @@ public class Test extends AppCompatActivity implements SensorEventListener {
         last_y = 0;
         last_z = 0;
         shakeIndicator = (ImageView) findViewById(R.id.indicator_shake);
+        backGround = (LinearLayout) findViewById(R.id.background);
+        move = 0;
     }
 
 
@@ -62,12 +67,22 @@ public class Test extends AppCompatActivity implements SensorEventListener {
             float y = sensorEvent.values[SensorManager.DATA_Y];
             float z = sensorEvent.values[SensorManager.DATA_Z];
 
-            float speed = Math.abs(x+y+z - last_x - last_y - last_z) / diffTime * 10000;
+            float x_speed = Math.abs(x - last_x) / diffTime * 10000;
+            float y_speed = Math.abs(y - last_y) / diffTime * 10000;
+            float z_speed = Math.abs(z - last_z) / diffTime * 10000;
 
-            if (speed > SHAKE_THRESHOLD) {
-                shakeText.setText("Shaking");
-                shakeIndicator.setImageResource(R.drawable.red);
-            } else {
+
+            if (x_speed > SHAKE_THRESHOLD) {
+                shakeText.setText("Shaking left right");
+                backGround.setBackgroundColor(Color.RED);
+            } else if (y_speed > SHAKE_THRESHOLD) {
+                shakeText.setText("Shaking up down");
+                backGround.setBackgroundColor(Color.GREEN);
+            }  else if (z_speed > SHAKE_THRESHOLD) {
+                shakeText.setText("Shaking forward backward");
+                backGround.setBackgroundColor(Color.BLUE);
+            }
+            else {
                 shakeText.setText("Not shaking");
                 shakeIndicator.setImageResource(R.drawable.white);
             }
