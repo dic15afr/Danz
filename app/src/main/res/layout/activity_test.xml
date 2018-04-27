@@ -9,13 +9,13 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="231dp"
+        android:layout_width="348dp"
         android:layout_height="26dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Accelerometer Values"
+        android:text="Accelerometer data cartesian/polar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.184"
@@ -85,7 +85,7 @@
     <LinearLayout
         android:id="@+id/background"
         android:layout_width="368dp"
-        android:layout_height="547dp"
+        android:layout_height="229dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -94,6 +94,36 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/text_shake"></LinearLayout>
+
+    <TextView
+        android:id="@+id/text_gravity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/text_x"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <TextView
+        android:id="@+id/text_theta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/text_y"
+        app:layout_constraintTop_toBottomOf="@+id/text_gravity" />
+
+    <TextView
+        android:id="@+id/text_phi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/text_z"
+        app:layout_constraintTop_toBottomOf="@+id/text_theta" />
 
 </android.support.constraint.ConstraintLayout>
