@@ -49,19 +49,20 @@ public class Play extends AppCompatActivity implements Observer{
         progressBar = findViewById(R.id.progressBar);
         progressBar.setMax(mediaPlayer.getDuration());
 
-        video = findViewById(R.id.video);
         image = findViewById(R.id.image);
-        image.setVisibility(View.VISIBLE);
-        video.setVisibility(View.INVISIBLE);
+
+        video = findViewById(R.id.video);
+        video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.white));
+        video.start();
 
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mPlayer) {
                 observer.stop();
                 video.stopPlayback();
-                video.setVisibility(View.INVISIBLE);
+                video.setAlpha(0);
                 image.setImageResource(R.drawable.main);
-                image.setVisibility(View.VISIBLE);
+                image.setAlpha(255);
                 progressBar.setProgress(mPlayer.getCurrentPosition());
             }
         });
@@ -79,53 +80,84 @@ public class Play extends AppCompatActivity implements Observer{
 
     public void playBtn(View v){
         mediaPlayer.start();
+        video.start();
         image.setImageResource(R.drawable.start);
     }
 
     public void stopBtn(View v){
         mediaPlayer.stop();
         observer.stop();
+        video.stopPlayback();
+        song.stop();
         finish();
     }
 
     public void pauseBtn(View v){
         if(mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
+            video.pause();
         }
     }
 
     @Override
     public void update(Observable o, Object arg) {
+            int move;
+            switch ((int) arg){
+                case 0:
+                    move = 0;
+                    break;
+                case 1:
+                    move = R.raw.wave;
+                    break;
+                case 2:
+                    move = R.raw.updown;
+                    break;
+                case 3:
+                    move = R.raw.leftright;
+                    break;
+                case 4:
+                    move = R.raw.forback;
+                    break;
+                default:
+                    move = 0;
+                    break;
+            }
 
-        int move = R.raw.leftright;
-        switch ((int) arg){
-            case 0:
-                break;
-            case 1:
-                move = R.raw.wave;
-                break;
-            case 2:
-                move = R.raw.updown;
-                break;
-            case 3:
-                move = R.raw.leftright;
-                break;
-            case 4:
-                move = R.raw.forback;
-                break;
+            if (move == 0){
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        image.setImageResource(R.drawable.main);
+                        video.setAlpha(0);
+                        image.setAlpha(255);
+                        video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.white));
+                    }
+                });
 
-        }
-        final Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+move); //Declare your url here.
+            }else {
+                final Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + move);
 
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    video.setVideoURI(uri);
-                    video.start();
-                    image.setVisibility(View.INVISIBLE);
-                    video.setVisibility(View.VISIBLE);
-                }
-            });
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        video.setVideoURI(uri);
+                        if(video.getAlpha() == 0){
+                            image.setAlpha(0);
+                            video.setAlpha(1);
+                        }
+                    }
+                });
+            }
+
+    }
+
+    public void onPause() {
+        super.onPause();
+        mediaPlayer.stop();
+        observer.stop();
+        video.stopPlayback();
+        song.stop();
+        finish();
     }
 
     private class MediaObserver implements Runnable {

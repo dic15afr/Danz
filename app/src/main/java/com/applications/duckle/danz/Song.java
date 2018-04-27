@@ -7,4 +7,6 @@ import java.util.Map;
 public interface Song extends Runnable {
 
     public MediaPlayer mediaPlayer();
+
+    public void stop();
 }

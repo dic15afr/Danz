@@ -1,9 +1,6 @@
 package com.applications.duckle.danz;
 
 import android.media.MediaPlayer;
-
-import java.util.Collections;
-import java.util.Map;
 import java.util.Observable;
 import java.util.TreeMap;
 
@@ -12,7 +9,7 @@ public class ChickenDanceSong extends Observable implements Song {
     public MediaPlayer mediaPlayer;
 
     //Create the map of timings and moves
-    private static final Map<Integer, Integer> moves = createMap();
+    private TreeMap<Integer, Integer> moves = createMap();
 
     private static final int songFile = R.raw.birddance;
 
@@ -24,6 +21,8 @@ public class ChickenDanceSong extends Observable implements Song {
     private int pastMove;
     private int currentMove = Moves.NO_MOVE;
 
+    private boolean stop = false;
+
     public ChickenDanceSong(Play play){
         mediaPlayer = MediaPlayer.create(play, songFile);
         addObserver(play);
@@ -32,24 +31,25 @@ public class ChickenDanceSong extends Observable implements Song {
 
     @Override
     public void run() {
-        while(true){
-            while(mediaPlayer.isPlaying()){
-                currentTime = mediaPlayer.getCurrentPosition();
-                if(moves.containsKey(currentTime)){
-                    pastMove = currentMove;
-                    currentMove = moves.get(currentTime);
-                    if (currentMove != pastMove) {
-                        setChanged();
-                        notifyObservers(currentMove);
-                    }
+        while(!moves.isEmpty() && !stop) {
+            currentTime = mediaPlayer.getCurrentPosition();
+            if (moves.firstKey() <= currentTime) {
+                pastMove = currentMove;
+                currentMove = moves.pollFirstEntry().getValue();
+                if (currentMove != pastMove) {
+                    setChanged();
+                    notifyObservers(currentMove);
                 }
             }
         }
-
     }
 
-    private static Map<Integer, Integer> createMap(){
-        Map<Integer, Integer> result = new TreeMap<>();
+    public void stop(){
+        stop = true;
+    }
+
+    private static TreeMap<Integer, Integer> createMap(){
+        TreeMap<Integer, Integer> result = new TreeMap<>();
 
         result.put(0, Moves.NO_MOVE);
         int start = 6800;
@@ -106,7 +106,7 @@ public class ChickenDanceSong extends Observable implements Song {
 
         result.put(start, Moves.NO_MOVE);
 
-        return Collections.unmodifiableMap(result);
+        return result;
     }
 
     @Override
