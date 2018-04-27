@@ -99,7 +99,7 @@ public class Test extends AppCompatActivity implements SensorEventListener {
             phiText.setText("Phi: " + roundPrecision((float)phi, 3));
             gravText.setText("Gravity: " + roundPrecision((float)grav, 3));
 
-            max = Math.max(max, (float)ang_speed);
+            //max = Math.max(max, (float)ang_speed);
 
 
             //if (ang_speed > SHAKE_THRESHOLD){
@@ -131,7 +131,7 @@ public class Test extends AppCompatActivity implements SensorEventListener {
     private String roundPrecision(float num, int deci){
         String numb = Float.toString(num);
         int comma = numb.indexOf(".");
-        if( comma > -1){
+        if( comma > -1 && comma < numb.length() - deci){
             numb = numb.substring(0, comma + deci);
         }
         return numb;
