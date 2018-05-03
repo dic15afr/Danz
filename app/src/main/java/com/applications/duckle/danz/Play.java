@@ -1,8 +1,10 @@
 package com.applications.duckle.danz;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -23,11 +25,18 @@ public class Play extends AppCompatActivity implements Observer{
     private VideoView video;
     private ImageView image;
     private Song song;
+    private Accelerometer accelerometer;
+    private int currentMove;
+    private int points = 0;
+    private TextView score;
+    private Vibrator v;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
+
+        accelerometer = new Accelerometer(this);
 
         Intent intent = getIntent();
 
@@ -42,8 +51,11 @@ public class Play extends AppCompatActivity implements Observer{
 
         mediaPlayer = song.mediaPlayer();
 
+        v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
+
         new Thread(song).start();
 
+        score = findViewById(R.id.score);
         TextView songNameTextView = findViewById(R.id.songName);
         songNameTextView.setText(songName);
         progressBar = findViewById(R.id.progressBar);
@@ -101,54 +113,69 @@ public class Play extends AppCompatActivity implements Observer{
 
     @Override
     public void update(Observable o, Object arg) {
-            int move;
-            switch ((int) arg){
-                case 0:
-                    move = 0;
-                    break;
-                case 1:
-                    move = R.raw.wave;
-                    break;
-                case 2:
-                    move = R.raw.updown;
-                    break;
-                case 3:
-                    move = R.raw.leftright;
-                    break;
-                case 4:
-                    move = R.raw.forback;
-                    break;
-                default:
-                    move = 0;
-                    break;
+        if (o instanceof Song) {
+            if(currentMove != (int) arg){
+                currentMove = (int) arg;
+                updateMove();
             }
-
-            if (move == 0){
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        image.setImageResource(R.drawable.main);
-                        video.setAlpha(0);
-                        image.setAlpha(255);
-                        video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.white));
-                    }
-                });
-
-            }else {
-                final Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + move);
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        video.setVideoURI(uri);
-                        if(video.getAlpha() == 0){
-                            image.setAlpha(0);
-                            video.setAlpha(1);
-                        }
-                    }
-                });
+        }else if (o instanceof Accelerometer) {
+            if ((int) arg == currentMove){
+                points++;
+                v.vibrate(50);
+                String scoreText = "Points: " + points;
+                score.setText(scoreText);
             }
+        }
+    }
 
+    private void updateMove(){
+        int move;
+        switch (currentMove){
+            case 0:
+                move = 0;
+                break;
+            case 1:
+                move = R.raw.wave;
+                break;
+            case 2:
+                move = R.raw.updown;
+                break;
+            case 3:
+                move = R.raw.leftright;
+                break;
+            case 4:
+                move = R.raw.forback;
+                break;
+            default:
+                move = 0;
+                break;
+        }
+
+        if (move == 0){
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    image.setImageResource(R.drawable.main);
+                    video.setAlpha(0);
+                    image.setAlpha(255);
+                    video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.white));
+                }
+            });
+
+        }else {
+            final Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + move);
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    video.setVideoURI(uri);
+                    if(video.getAlpha() == 0){
+                        image.setAlpha(0);
+                        video.setAlpha(1);
+                    }
+                }
+            });
+        }
     }
 
     public void onPause() {
