@@ -45,10 +45,10 @@ public class Accelerometer extends Observable implements SensorEventListener {
             float max_diff = Math.max(diff[0], diff[1]);
             max_diff = Math.max(max_diff, diff[2]);
 
+            setChanged();
             if (diff[0] == max_diff) {
                 // X axis
                 notifyObservers(Moves.LEFT_AND_RIGHT_MOVE);
-                System.out.println("LEFT RIGHT");
             } else if (diff[1] == max_diff) {
                 // Y axis
                 notifyObservers(Moves.UP_AND_DOWN_MOVE);
