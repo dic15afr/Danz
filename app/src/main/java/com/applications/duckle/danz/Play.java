@@ -119,9 +119,9 @@ public class Play extends AppCompatActivity implements Observer{
                 updateMove();
             }
         }else if (o instanceof Accelerometer) {
-            if ((int) arg == currentMove){
+            if ((int) arg == currentMove && currentMove != Moves.NO_MOVE){
                 points++;
-                v.vibrate(50);
+                v.vibrate(40);
                 String scoreText = "Points: " + points;
                 score.setText(scoreText);
             }
