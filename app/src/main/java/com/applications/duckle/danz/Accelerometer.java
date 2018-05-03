@@ -17,6 +17,8 @@ public class Accelerometer extends Observable implements SensorEventListener {
     private Sensor acc_sensors;
     private float [] prev_acc;
     private long lastUpdate;
+    private float last_x, last_y, last_z;
+    private final int SHAKE_THRESHOLD = 400;
 
     public Accelerometer (Play play){
         super();
@@ -26,40 +28,49 @@ public class Accelerometer extends Observable implements SensorEventListener {
         acc_sensors = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mSensorManager.registerListener(this, acc_sensors, SensorManager.SENSOR_DELAY_GAME);
         prev_acc = new float [3];
+        last_x = 0;
+        last_y = 0;
+        last_z = 0;
     }
 
     @Override
-    public void onSensorChanged(SensorEvent event) {
-        long curTime = System.currentTimeMillis();
-        float[] acc = event.values;
+    public void onSensorChanged(SensorEvent sensorEvent) {
 
-        if(curTime - lastUpdate > 100) {
+        long curTime = System.currentTimeMillis();
+        if ((curTime - lastUpdate) > 100) {
             long diffTime = (curTime - lastUpdate);
             lastUpdate = curTime;
 
-            float[] diff = new float[3];
-            for (int i = 0; i < 3; i++) {
-                diff[i] = acc[i] - prev_acc[i];
-            }
-            
-            float max_diff = Math.max(diff[0], diff[1]);
-            max_diff = Math.max(max_diff, diff[2]);
+
+            float x = sensorEvent.values[SensorManager.DATA_X];
+            float y = sensorEvent.values[SensorManager.DATA_Y];
+            float z = sensorEvent.values[SensorManager.DATA_Z];
+
+            float x_speed = Math.abs(x - last_x) / diffTime * 10000;
+            float y_speed = Math.abs(y - last_y) / diffTime * 10000;
+            float z_speed = Math.abs(z - last_z) / diffTime * 10000;
+
+            float max = Math.max(x_speed, y_speed);
+            max = Math.max(max, z_speed);
 
             setChanged();
-            if (diff[0] == max_diff) {
-                // X axis
-                notifyObservers(Moves.LEFT_AND_RIGHT_MOVE);
-            } else if (diff[1] == max_diff) {
-                // Y axis
+            if (x_speed > SHAKE_THRESHOLD && x_speed == max) {
+               notifyObservers(Moves.LEFT_AND_RIGHT_MOVE);
+            } else if (y_speed > SHAKE_THRESHOLD && y_speed == max) {
                 notifyObservers(Moves.UP_AND_DOWN_MOVE);
-            } else if (diff[2] == max_diff) {
-                // Z axis
+            }  else if (z_speed > SHAKE_THRESHOLD && z_speed == max) {
                 notifyObservers(Moves.FORWARD_AND_BACKWARD_MOVE);
             } else {
-                notifyObservers(Moves.NO_MOVE);
+                //notifyObservers(Moves.NO_MOVE);
             }
+
+
+
+            last_x = x;
+            last_y = y;
+            last_z = z;
         }
-        prev_acc = acc;
+
     }
 
     @Override

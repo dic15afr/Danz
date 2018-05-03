@@ -26,6 +26,7 @@ public class Test extends AppCompatActivity implements SensorEventListener {
     float last_x, last_y, last_z;
     double last_theta, last_grav, last_phi;
     private int move;
+    private float [] prev_acc;
 
 
     @Override
@@ -52,6 +53,7 @@ public class Test extends AppCompatActivity implements SensorEventListener {
         shakeIndicator = (ImageView) findViewById(R.id.indicator_shake);
         backGround = (LinearLayout) findViewById(R.id.background);
         move = 0;
+        prev_acc = new float[3];
     }
 
 
@@ -59,14 +61,13 @@ public class Test extends AppCompatActivity implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         acc_values = sensorEvent.values;
-        xText.setText("X: " + roundPrecision(acc_values[0], 1));
-        yText.setText("Y: " + roundPrecision(acc_values[1], 1));
-        zText.setText("Z: " + roundPrecision(acc_values[2], 1));
+        xText.setText("X: " + roundPrecision(acc_values[0], 3));
+        yText.setText("Y: " + roundPrecision(acc_values[1], 3));
+        zText.setText("Z: " + roundPrecision(acc_values[2], 3));
 
 
         long curTime = System.currentTimeMillis();
-            // only allow one update every 100ms.
-        if ((curTime - lastUpdate) > 1000/UPDATE_RATE) {
+        if ((curTime - lastUpdate) > 1000 / UPDATE_RATE) {
             long diffTime = (curTime - lastUpdate);
             lastUpdate = curTime;
 
@@ -79,14 +80,14 @@ public class Test extends AppCompatActivity implements SensorEventListener {
             float y_speed = Math.abs(y - last_y) / diffTime * 10000;
             float z_speed = Math.abs(z - last_z) / diffTime * 10000;
 
-            //float max = Math.max(x_speed, y_speed);
-            //max = Math.max(max, z_speed);
+            float max = Math.max(x_speed, y_speed);
+            max = Math.max(max, z_speed);
 
             // will always point down.
             double grav = Math.sqrt(
-                    Math.pow((double)x, 2) +
-                    Math.pow((double)y, 2)+
-                    Math.pow((double)z, 2));
+                    Math.pow((double) x, 2) +
+                            Math.pow((double) y, 2) +
+                            Math.pow((double) z, 2));
 
             // angle in x-y plane
             double theta = Math.toDegrees(Math.atan2(y, x));
@@ -96,20 +97,20 @@ public class Test extends AppCompatActivity implements SensorEventListener {
 
             // value doesnt matter, difference is important
             double theta_speed = Math.abs(theta - last_theta) / diffTime * 10000;
-            double grav_speed = Math.abs(grav - last_grav)  / diffTime * 10000;
+            double grav_speed = Math.abs(grav - last_grav) / diffTime * 10000;
             double phi_speed = Math.abs(phi - last_phi) / diffTime * 10000;
 
-            thetaText.setText("Theta: " + roundPrecision((float)theta, 3));
-            phiText.setText("Phi: " + roundPrecision((float)phi, 3));
-            gravText.setText("Gravity: " + roundPrecision((float)grav, 3));
+            thetaText.setText("Theta: " + roundPrecision((float) theta, 3));
+            phiText.setText("Phi: " + roundPrecision((float) phi, 3));
+            gravText.setText("Gravity: " + roundPrecision((float) grav, 3));
 
             //max = Math.max(max, (float)ang_speed);
 
 
             //if (ang_speed > SHAKE_THRESHOLD){
             //    backGround.setBackgroundColor(Color.YELLOW);
-            /*
-             if (x_speed > SHAKE_THRESHOLD && x_speed == max) {
+
+            if (x_speed > SHAKE_THRESHOLD && x_speed == max) {
                 shakeText.setText("Shaking left right");
                 backGround.setBackgroundColor(Color.RED);
             } else if (y_speed > SHAKE_THRESHOLD && y_speed == max) {
@@ -118,32 +119,10 @@ public class Test extends AppCompatActivity implements SensorEventListener {
             }  else if (z_speed > SHAKE_THRESHOLD && z_speed == max) {
                 shakeText.setText("Shaking forward backward");
                 backGround.setBackgroundColor(Color.BLUE);
-            }   else if (ang_speed > SHAKE_THRESHOLD && ang_speed == max){
-                shakeText.setText("Twisting");
-                backGround.setBackgroundColor(Color.YELLOW);
-             else {
-                shakeText.setText("Not shaking");
-                backGround.setBackgroundColor(Color.WHITE);
-            }
-            */
-
-            double polar_max = Math.max(grav_speed, theta_speed);
-            polar_max = Math.max(polar_max, phi_speed);
-
-            if(grav_speed > SHAKE_THRESHOLD && grav_speed == polar_max){
-                shakeText.setText("Shaking");
-                backGround.setBackgroundColor(Color.YELLOW);
-            } else if (phi_speed > SHAKE_THRESHOLD && phi_speed == polar_max) {
-                shakeText.setText("Tipping");
-                backGround.setBackgroundColor(Color.MAGENTA);
-            } else if (theta_speed > SHAKE_THRESHOLD && theta_speed == polar_max){
-                shakeText.setText("rolling");
-                backGround.setBackgroundColor(Color.CYAN);
             } else {
-                shakeText.setText("Not shaking");
-                backGround.setBackgroundColor(Color.WHITE);
+                    shakeText.setText("Not shaking");
+                    backGround.setBackgroundColor(Color.WHITE);
             }
-
 
 
 
