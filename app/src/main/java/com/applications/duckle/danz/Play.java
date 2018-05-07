@@ -1,7 +1,6 @@
 package com.applications.duckle.danz;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Vibrator;
@@ -10,16 +9,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.content.Intent;
 import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.VideoView;
-
 import java.util.Observable;
 import java.util.Observer;
 
 public class Play extends AppCompatActivity implements Observer{
-    private MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayer, pointMediaPlayer;
     private MediaObserver observer = null;
     private ProgressBar progressBar;
     private VideoView video;
@@ -50,6 +47,7 @@ public class Play extends AppCompatActivity implements Observer{
         }
 
         mediaPlayer = song.mediaPlayer();
+        pointMediaPlayer = MediaPlayer.create(this, R.raw.ding);
 
         v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
 
@@ -91,9 +89,11 @@ public class Play extends AppCompatActivity implements Observer{
     }
 
     public void playBtn(View v){
+        if(!mediaPlayer.isPlaying()){
+            video.start();
+            image.setImageResource(R.drawable.start);
+        }
         mediaPlayer.start();
-        video.start();
-        image.setImageResource(R.drawable.start);
     }
 
     public void stopBtn(View v){
@@ -101,6 +101,7 @@ public class Play extends AppCompatActivity implements Observer{
         observer.stop();
         video.stopPlayback();
         song.stop();
+        accelerometer.deleteObservers();
         finish();
     }
 
@@ -121,6 +122,9 @@ public class Play extends AppCompatActivity implements Observer{
         }else if (o instanceof Accelerometer) {
             if ((int) arg == currentMove && currentMove != Moves.NO_MOVE){
                 points++;
+                if(points % 10 == 0){
+                    pointMediaPlayer.start();
+                }
                 v.vibrate(40);
                 String scoreText = "Points: " + points;
                 score.setText(scoreText);
@@ -184,6 +188,7 @@ public class Play extends AppCompatActivity implements Observer{
         observer.stop();
         video.stopPlayback();
         song.stop();
+        accelerometer.deleteObservers();
         finish();
     }
 

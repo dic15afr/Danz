@@ -37,7 +37,7 @@ public class Accelerometer extends Observable implements SensorEventListener {
     public void onSensorChanged(SensorEvent sensorEvent) {
 
         long curTime = System.currentTimeMillis();
-        if ((curTime - lastUpdate) > 100) {
+        if ((curTime - lastUpdate) > 150) {
             long diffTime = (curTime - lastUpdate);
             lastUpdate = curTime;
 
