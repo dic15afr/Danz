@@ -22,7 +22,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Test" />
-        <activity android:name=".Play"></activity>
+        <activity android:name=".Play" />
+        <activity android:name=".Tutorial"></activity>
     </application>
 
 </manifest>

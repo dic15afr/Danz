@@ -33,7 +33,7 @@ public class Play extends AppCompatActivity implements Observer{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
-        accelerometer = new Accelerometer(this);
+        accelerometer = new Accelerometer(this,this);
 
         Intent intent = getIntent();
 

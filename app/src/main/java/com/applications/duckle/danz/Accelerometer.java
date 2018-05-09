@@ -4,8 +4,10 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.support.v7.app.AppCompatActivity;
 
 import java.util.Observable;
+import java.util.Observer;
 
 
 import static android.content.Context.SENSOR_SERVICE;
@@ -20,10 +22,10 @@ public class Accelerometer extends Observable implements SensorEventListener {
     private float last_x, last_y, last_z;
     private final int SHAKE_THRESHOLD = 400;
 
-    public Accelerometer (Play play){
+    public Accelerometer (Observer obs, AppCompatActivity play){
         super();
         current_move = Moves.NO_MOVE;
-        addObserver(play);
+        addObserver(obs);
         mSensorManager = (SensorManager) play.getSystemService(SENSOR_SERVICE);
         acc_sensors = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mSensorManager.registerListener(this, acc_sensors, SensorManager.SENSOR_DELAY_GAME);
