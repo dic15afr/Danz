@@ -42,6 +42,9 @@ public class Play extends AppCompatActivity implements Observer{
             case "Chicken Dance":
                 song = new ChickenDanceSong(this);
                 break;
+            case "Levels":
+                song = new LevelsSong(this);
+                break;
             default:
                 System.exit(0);
         }
@@ -129,6 +132,15 @@ public class Play extends AppCompatActivity implements Observer{
                 String scoreText = "Points: " + points;
                 score.setText(scoreText);
             }
+            else if ((currentMove == 5 && ((int) arg == 1 || (int) arg == 2 || (int) arg == 3 || (int)arg == 4))){
+                points++;
+                if(points % 10 == 0){
+                    pointMediaPlayer.start();
+                }
+                v.vibrate(40);
+                String scoreText = "Points: " + points;
+                score.setText(scoreText);
+            }
         }
     }
 
@@ -149,6 +161,9 @@ public class Play extends AppCompatActivity implements Observer{
                 break;
             case 4:
                 move = R.raw.forback;
+                break;
+            case 5:
+                move = R.raw.fistpump;
                 break;
             default:
                 move = 0;
