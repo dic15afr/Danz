@@ -51,7 +51,7 @@ public class LevelsSong extends Observable implements Song{
         TreeMap<Integer, Integer> result = new TreeMap<>();
 
         result.put(0, Moves.NO_MOVE);
-        result.put(10, Moves.FIST_PUMP);
+        result.put(7300, Moves.FIST_PUMP);
 
         return result;
     }
