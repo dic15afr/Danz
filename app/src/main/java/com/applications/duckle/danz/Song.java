@@ -5,7 +5,7 @@ import android.media.MediaPlayer;
 
 public interface Song extends Runnable {
 
-    public MediaPlayer mediaPlayer();
+    MediaPlayer mediaPlayer();
 
-    public void stop();
+    void stop();
 }

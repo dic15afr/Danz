@@ -8,15 +8,8 @@ import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
-
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 

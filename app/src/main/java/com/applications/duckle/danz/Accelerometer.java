@@ -14,22 +14,16 @@ import static android.content.Context.SENSOR_SERVICE;
 
 public class Accelerometer extends Observable implements SensorEventListener {
 
-    private int current_move;
-    private SensorManager mSensorManager;
-    private Sensor acc_sensors;
-    private float [] prev_acc;
     private long lastUpdate;
     private float last_x, last_y, last_z;
     private final int SHAKE_THRESHOLD = 400;
 
     public Accelerometer (Observer obs, AppCompatActivity play){
         super();
-        current_move = Moves.NO_MOVE;
         addObserver(obs);
-        mSensorManager = (SensorManager) play.getSystemService(SENSOR_SERVICE);
-        acc_sensors = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        SensorManager mSensorManager = (SensorManager) play.getSystemService(SENSOR_SERVICE);
+        Sensor acc_sensors = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mSensorManager.registerListener(this, acc_sensors, SensorManager.SENSOR_DELAY_GAME);
-        prev_acc = new float [3];
         last_x = 0;
         last_y = 0;
         last_z = 0;
@@ -62,17 +56,12 @@ public class Accelerometer extends Observable implements SensorEventListener {
                 notifyObservers(Moves.UP_AND_DOWN_MOVE);
             }  else if (z_speed > SHAKE_THRESHOLD && z_speed == max) {
                 notifyObservers(Moves.FORWARD_AND_BACKWARD_MOVE);
-            } else {
-                //notifyObservers(Moves.NO_MOVE);
             }
-
-
 
             last_x = x;
             last_y = y;
             last_z = z;
         }
-
     }
 
     @Override

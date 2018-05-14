@@ -11,8 +11,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     public static final String SONG_NAME = "com.example.duckle.danz.MESSAGE";
-    String songs[] = {"Chicken Dance", "Levels"};
-    int songImages[] = {R.drawable.chickendance, R.drawable.levels};
     ArrayList<Fragment> fragments = new ArrayList<>();
 
     @Override
@@ -25,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
         if (fragment == null) {
             fragment = new HorizontalListViewFragment();
             fragments.add(fragment);
-            ;
             fm.beginTransaction()
                     .add(R.id.fragmentContainer, fragment)
                     .commit();
