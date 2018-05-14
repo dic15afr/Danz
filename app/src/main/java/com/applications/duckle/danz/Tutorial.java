@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -39,9 +40,17 @@ public class Tutorial extends AppCompatActivity  implements Observer{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutorial);
+
+
        // replayButton = (ImageButton) findViewById(R.id.replay_button);
        // nextButton = (ImageButton) findViewById(R.id.next_button);
-        //video = (VideoView) findViewById(R.id.video_view);
+       // MediaController mc;
+        video = (VideoView) findViewById(R.id.videoView);
+        video.setMediaController(new MediaController(this));
+        video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.white));
+        video.requestFocus();
+        video.start();
+
         accelerometer = new Accelerometer(this, this);
         score = (TextView) findViewById(R.id.text_score);
         tutorialText = (TextView) findViewById(R.id.text_tutorial);
@@ -58,7 +67,7 @@ public class Tutorial extends AppCompatActivity  implements Observer{
                 break;
             case "Levels":
                 song = new LevelsSong(this);
-                //video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.fistpump));
+                video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.fistpump));
                 currentMove = Moves.FIST_PUMP;
                 break;
             default:
@@ -67,6 +76,7 @@ public class Tutorial extends AppCompatActivity  implements Observer{
         promptUpdate(currentMove);
         mediaPlayer = song.mediaPlayer();
         pointMediaPlayer = MediaPlayer.create(this, R.raw.ding);
+
     }
 
 
@@ -76,23 +86,57 @@ public class Tutorial extends AppCompatActivity  implements Observer{
         startActivity(intent);
     }
 
-    private void promptUpdate(int move){
+    private void promptUpdate(final int move){
         currentMove = move;
         switch (move) {
             case Moves.FIST_PUMP:
                 promptText.setText("PUMP YOUR FIST IN THE AIR. WOO!");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        video.setAlpha(0);
+                        video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + move));
+                    }
+                });
                 break;
             case Moves.FORWARD_AND_BACKWARD_MOVE:
                 promptText.setText("Move your phone forward and backward");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        video.setAlpha(0);
+                        video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + move));
+                    }
+                });
                 break;
             case Moves.LEFT_AND_RIGHT_MOVE:
                 promptText.setText("Move your phone left and right");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        video.setAlpha(0);
+                        video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + move));
+                    }
+                });
                 break;
             case Moves.UP_AND_DOWN_MOVE:
                 promptText.setText("Move your phone up and down");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        video.setAlpha(0);
+                        video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + move));
+                    }
+                });
                 break;
             default:
-                promptText.setText("");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        video.setAlpha(0);
+                        video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.white));
+                    }
+                });
                 break;
         }
     }
