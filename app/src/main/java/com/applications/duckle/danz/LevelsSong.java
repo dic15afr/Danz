@@ -27,6 +27,11 @@ public class LevelsSong extends Observable implements Song{
         addObserver(play);
     }
 
+    public LevelsSong (Tutorial tutorial){
+        mediaPlayer = MediaPlayer.create(tutorial, songFile);
+        addObserver(tutorial);
+    }
+
 
     @Override
     public void run() {

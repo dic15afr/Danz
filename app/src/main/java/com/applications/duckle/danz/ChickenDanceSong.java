@@ -28,6 +28,11 @@ public class ChickenDanceSong extends Observable implements Song {
         addObserver(play);
     }
 
+    public ChickenDanceSong (Tutorial tutorial){
+        mediaPlayer = MediaPlayer.create(tutorial, songFile);
+        addObserver(tutorial);
+    }
+
 
     @Override
     public void run() {
