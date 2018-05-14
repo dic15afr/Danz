@@ -6,95 +6,79 @@
     android:layout_height="match_parent"
     tools:context="com.applications.duckle.danz.Tutorial">
 
+    <TextView
+        android:id="@+id/tutorial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="TUTORIAL"
+        android:textColor="@android:color/black"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageButton
         android:id="@+id/replay_button"
         android:layout_width="79dp"
         android:layout_height="60dp"
-        android:layout_marginBottom="44dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="8dp"
         android:onClick="replayBtn"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/next_button"
-        app:layout_constraintHorizontal_bias="0.54"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_score"
         app:srcCompat="@android:drawable/ic_media_rew" />
 
     <ImageButton
         android:id="@+id/next_button"
         android:layout_width="78dp"
         android:layout_height="60dp"
-        android:layout_marginBottom="44dp"
-        android:layout_marginEnd="76dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="8dp"
         android:onClick="nextBtn"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_score"
         app:srcCompat="@android:drawable/ic_media_play" />
 
     <TextView
-        android:id="@+id/textView3"
-        android:layout_width="175dp"
-        android:layout_height="43dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:text="TUTORIAL"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/text_tutorial"
-        android:layout_width="305dp"
-        android:layout_height="26dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:text="Follow the move, score 10 to continue"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-    <TextView
         android:id="@+id/text_score"
-        android:layout_width="198dp"
+        android:layout_width="149dp"
         android:layout_height="66dp"
-        android:layout_marginBottom="124dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:text="Score: "
+        android:layout_marginTop="8dp"
+        android:text="Points: 0"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/videoView" />
 
     <TextView
         android:id="@+id/text_prompt"
-        android:layout_width="244dp"
-        android:layout_height="53dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Prompt"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        app:layout_constraintBottom_toTopOf="@+id/text_score"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_tutorial"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/tutorial" />
 
     <VideoView
         android:id="@+id/videoView"
-        android:layout_width="320dp"
-        android:layout_height="215dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="358dp"
+        android:layout_height="320dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/text_score"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_prompt" />

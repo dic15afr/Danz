@@ -16,7 +16,6 @@ public class ChickenDanceSong extends Observable implements Song {
     public static final String songName = "Chicken Dance";
 
     private int currentTime = 0;
-    private long pastTime = 0;
 
     private int pastMove;
     private int currentMove = Moves.NO_MOVE;
@@ -60,53 +59,89 @@ public class ChickenDanceSong extends Observable implements Song {
         int start = 6800;
         for (int k = 0; k < 3; k++) {
             for (int i = 0; i < 4; i++) {
-                for (int n = Moves.WAVE_MOVE; n <= Moves.FORWARD_AND_BACKWARD_MOVE; n++) {
+                for (int n = Moves.UP_AND_DOWN_MOVE; n <= Moves.LEFT_AND_RIGHT_MOVE; n++) {
                     result.put(start, n);
                     start += 1250;
+                    if(n == Moves.UP_AND_DOWN_MOVE){
+                        result.put(start, n);
+                        start += 1250;
+                    }
                 }
             }
-            result.put(start, Moves.NO_MOVE);
+            result.put(start, Moves.FREESTYLE);
             start += 19800;
         }
 
-        for (int n = Moves.WAVE_MOVE; n <= Moves.FORWARD_AND_BACKWARD_MOVE; n++) {
+        for (int n = Moves.UP_AND_DOWN_MOVE; n <= Moves.LEFT_AND_RIGHT_MOVE; n++) {
             result.put(start, n);
             start += 1550;
+            if(n == Moves.UP_AND_DOWN_MOVE){
+                result.put(start, n);
+                start += 1550;
+            }
         }
 
-        for (int n = Moves.WAVE_MOVE; n <= Moves.FORWARD_AND_BACKWARD_MOVE; n++) {
+        for (int n = Moves.UP_AND_DOWN_MOVE; n <= Moves.LEFT_AND_RIGHT_MOVE; n++) {
             result.put(start, n);
             start += 1300;
+            if(n == Moves.UP_AND_DOWN_MOVE){
+                result.put(start, n);
+                start += 1300;
+            }
         }
 
-        for (int n = Moves.WAVE_MOVE; n <= Moves.FORWARD_AND_BACKWARD_MOVE; n++) {
+        for (int n = Moves.UP_AND_DOWN_MOVE; n <= Moves.LEFT_AND_RIGHT_MOVE; n++) {
             result.put(start, n);
             start += 1175;
+            if(n == Moves.UP_AND_DOWN_MOVE){
+                result.put(start, n);
+                start += 1175;
+            }
         }
 
-        for (int n = Moves.WAVE_MOVE; n <= Moves.FORWARD_AND_BACKWARD_MOVE; n++) {
+        for (int n = Moves.UP_AND_DOWN_MOVE; n <= Moves.LEFT_AND_RIGHT_MOVE; n++) {
             result.put(start, n);
             start += 1100;
+            if(n == Moves.UP_AND_DOWN_MOVE){
+                result.put(start, n);
+                start += 1100;
+            }
         }
 
-        for (int n = Moves.WAVE_MOVE; n <= Moves.FORWARD_AND_BACKWARD_MOVE; n++) {
+        for (int n = Moves.UP_AND_DOWN_MOVE; n <= Moves.LEFT_AND_RIGHT_MOVE; n++) {
             result.put(start, n);
             start += 1025;
+            if(n == Moves.UP_AND_DOWN_MOVE){
+                result.put(start, n);
+                start += 1025;
+            }
         }
 
-        for (int n = Moves.WAVE_MOVE; n <= Moves.FORWARD_AND_BACKWARD_MOVE; n++) {
+        for (int n = Moves.UP_AND_DOWN_MOVE; n <= Moves.LEFT_AND_RIGHT_MOVE; n++) {
             result.put(start, n);
             start += 975;
+            if(n == Moves.UP_AND_DOWN_MOVE){
+                result.put(start, n);
+                start += 975;
+            }
         }
 
-        for (int n = Moves.WAVE_MOVE; n <= Moves.FORWARD_AND_BACKWARD_MOVE; n++) {
+        for (int n = Moves.UP_AND_DOWN_MOVE; n <= Moves.LEFT_AND_RIGHT_MOVE; n++) {
             result.put(start, n);
             start += 950;
+            if(n == Moves.UP_AND_DOWN_MOVE){
+                result.put(start, n);
+                start += 950;
+            }
         }
 
-        for (int n = Moves.WAVE_MOVE; n <= Moves.FORWARD_AND_BACKWARD_MOVE; n++) {
+        for (int n = Moves.UP_AND_DOWN_MOVE; n <= Moves.LEFT_AND_RIGHT_MOVE; n++) {
             result.put(start, n);
             start += 950;
+            if(n == Moves.UP_AND_DOWN_MOVE){
+                result.put(start, n);
+                start += 950;
+            }
         }
 
         result.put(start, Moves.NO_MOVE);

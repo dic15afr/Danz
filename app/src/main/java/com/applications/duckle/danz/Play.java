@@ -24,6 +24,7 @@ public class Play extends AppCompatActivity implements Observer{
     private Song song;
     private Accelerometer accelerometer;
     private int currentMove;
+    private int previousMove = 0;
     private int points = 0;
     private TextView score;
     private Vibrator v;
@@ -77,6 +78,8 @@ public class Play extends AppCompatActivity implements Observer{
                 image.setImageResource(R.drawable.main);
                 image.setAlpha(255);
                 progressBar.setProgress(mPlayer.getCurrentPosition());
+                findViewById(R.id.play_btn).setEnabled(false);
+                findViewById(R.id.pause_btn).setEnabled(false);
             }
         });
 
@@ -123,23 +126,28 @@ public class Play extends AppCompatActivity implements Observer{
                 updateMove();
             }
         }else if (o instanceof Accelerometer) {
-            if ((int) arg == currentMove && currentMove != Moves.NO_MOVE){
-                points++;
-                if(points % 10 == 0){
-                    pointMediaPlayer.start();
+            if(currentMove != Moves.NO_MOVE) {
+                if (((int) arg == currentMove || currentMove == Moves.FIST_PUMP) && mediaPlayer.isPlaying()) {
+                    points++;
+                    if (points % 10 == 0) {
+                        pointMediaPlayer.start();
+                    }
+                    v.vibrate(40);
+                    String scoreText = "Points: " + points;
+                    score.setText(scoreText);
+                } else if (currentMove == Moves.FREESTYLE){
+                    if(previousMove != (int) arg){
+                        previousMove = (int) arg;
+
+                        points++;
+                        if (points % 10 == 0) {
+                            pointMediaPlayer.start();
+                        }
+                        v.vibrate(40);
+                        String scoreText = "Points: " + points;
+                        score.setText(scoreText);
+                    }
                 }
-                v.vibrate(40);
-                String scoreText = "Points: " + points;
-                score.setText(scoreText);
-            }
-            else if ((currentMove == 5 && ((int) arg == 1 || (int) arg == 2 || (int) arg == 3 || (int)arg == 4))){
-                points++;
-                if(points % 10 == 0){
-                    pointMediaPlayer.start();
-                }
-                v.vibrate(40);
-                String scoreText = "Points: " + points;
-                score.setText(scoreText);
             }
         }
     }
@@ -151,19 +159,19 @@ public class Play extends AppCompatActivity implements Observer{
                 move = 0;
                 break;
             case 1:
-                move = R.raw.wave;
+                move = R.raw.updown;
                 break;
             case 2:
-                move = R.raw.updown;
+                move = R.raw.forback;
                 break;
             case 3:
                 move = R.raw.leftright;
                 break;
             case 4:
-                move = R.raw.forback;
+                move = R.raw.fistpump;
                 break;
             case 5:
-                move = R.raw.fistpump;
+                move = 5;
                 break;
             default:
                 move = 0;
@@ -180,7 +188,16 @@ public class Play extends AppCompatActivity implements Observer{
                     video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.white));
                 }
             });
-
+        }else if(move == 5) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    image.setImageResource(R.drawable.freestyle);
+                    video.setAlpha(0);
+                    image.setAlpha(255);
+                    video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.white));
+                }
+            });
         }else {
             final Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + move);
 

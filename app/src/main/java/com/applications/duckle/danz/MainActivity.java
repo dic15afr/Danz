@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void play(View v){
-        Intent intent = new Intent(this, Tutorial.class);
+        Intent intent = new Intent(this, PreTutorial.class);
         String songName = null;
         for(Fragment f : fragments){
             HorizontalListViewFragment hlf = (HorizontalListViewFragment) f;
@@ -45,9 +45,5 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra(SONG_NAME, songName);
             startActivity(intent);
         }
-    }
-
-    public void test(View v){
-        startActivity(new Intent(this, Test.class));
     }
 }

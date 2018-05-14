@@ -21,18 +21,13 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class Tutorial extends AppCompatActivity  implements Observer{
-   // private ImageButton replayButton;
-   // private ImageButton nextButton;
-    private MediaPlayer mediaPlayer, pointMediaPlayer;
-    private TextView score, tutorialText, promptText;
+    private MediaPlayer pointMediaPlayer;
+    private TextView score, promptText;
     private VideoView video;
-    private Song song;
     private String songName;
-    private int currentMove;
+    private int currentMove, videoMove;
     private Vibrator v;
-
     private Accelerometer accelerometer;
-
     private int points = 0;
 
 
@@ -41,91 +36,103 @@ public class Tutorial extends AppCompatActivity  implements Observer{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutorial);
 
-
-       // replayButton = (ImageButton) findViewById(R.id.replay_button);
-       // nextButton = (ImageButton) findViewById(R.id.next_button);
-       // MediaController mc;
-        video = (VideoView) findViewById(R.id.videoView);
-        video.setMediaController(new MediaController(this));
+        video = findViewById(R.id.videoView);
         video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.white));
-        video.requestFocus();
         video.start();
 
         accelerometer = new Accelerometer(this, this);
-        score = (TextView) findViewById(R.id.text_score);
-        tutorialText = (TextView) findViewById(R.id.text_tutorial);
-        promptText = (TextView) findViewById(R.id.text_prompt);
+        score = findViewById(R.id.text_score);
+        promptText = findViewById(R.id.text_prompt);
         v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
-        currentMove = Moves.NO_MOVE;
+
+        pointMediaPlayer = MediaPlayer.create(this, R.raw.ding);
+
+        video.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mPlayer) {
+                video.start();
+            }
+        });
 
         Intent intent = getIntent();
         songName = intent.getStringExtra(MainActivity.SONG_NAME);
         switch (songName){
             case "Chicken Dance":
-                song = new ChickenDanceSong(this);
-                currentMove = Moves.UP_AND_DOWN_MOVE;
+                videoMove = 1;
                 break;
             case "Levels":
-                song = new LevelsSong(this);
-                video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.fistpump));
-                currentMove = Moves.FIST_PUMP;
+                videoMove = 5;
                 break;
             default:
                 System.exit(0);
         }
-        promptUpdate(currentMove);
-        mediaPlayer = song.mediaPlayer();
-        pointMediaPlayer = MediaPlayer.create(this, R.raw.ding);
-
+        promptUpdate(videoMove);
     }
 
 
     public void replayBtn(View v){
-        Intent intent = new Intent(this, Tutorial.class);
-        intent.putExtra(MainActivity.SONG_NAME, songName);
-        startActivity(intent);
+        points = 0;
+        String scoreText = "Points: " + points;
+        score.setText(scoreText);
+
+        if(songName.equals("Chicken Dance")){
+            videoMove = 1;
+        } else {
+            videoMove = 5;
+        }
+        promptUpdate(videoMove);
     }
 
-    private void promptUpdate(final int move){
-        currentMove = move;
+    private void promptUpdate(int move){
         switch (move) {
-            case Moves.FIST_PUMP:
-                promptText.setText("PUMP YOUR FIST IN THE AIR. WOO!");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        video.setAlpha(0);
-                        video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + move));
-                    }
-                });
-                break;
-            case Moves.FORWARD_AND_BACKWARD_MOVE:
-                promptText.setText("Move your phone forward and backward");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        video.setAlpha(0);
-                        video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + move));
-                    }
-                });
-                break;
-            case Moves.LEFT_AND_RIGHT_MOVE:
-                promptText.setText("Move your phone left and right");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        video.setAlpha(0);
-                        video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + move));
-                    }
-                });
-                break;
-            case Moves.UP_AND_DOWN_MOVE:
+            case 1:
                 promptText.setText("Move your phone up and down");
+                currentMove = Moves.UP_AND_DOWN_MOVE;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        video.setAlpha(0);
-                        video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + move));
+                        video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.move1));
+                    }
+                });
+                break;
+            case 2:
+                promptText.setText("Move your phone up and down");
+                currentMove = Moves.UP_AND_DOWN_MOVE;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.move2));
+                        video.start();
+                    }
+                });
+                break;
+            case 3:
+                promptText.setText("Move your phone forward and backward");
+                currentMove = Moves.FORWARD_AND_BACKWARD_MOVE;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.move3));
+                    }
+                });
+                break;
+            case 4:
+                promptText.setText("Move your phone left and right");
+                currentMove = Moves.LEFT_AND_RIGHT_MOVE;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.move4));
+                    }
+                });
+                break;
+            case 5:
+                promptText.setText("Pump your fist in the air!");
+                currentMove = Moves.FIST_PUMP;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.fistpump));
                     }
                 });
                 break;
@@ -133,7 +140,6 @@ public class Tutorial extends AppCompatActivity  implements Observer{
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        video.setAlpha(0);
                         video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.white));
                     }
                 });
@@ -142,46 +148,49 @@ public class Tutorial extends AppCompatActivity  implements Observer{
     }
 
     public void nextBtn(View v){
-        if(songName.equals("Chicken Dance") && currentMove != 5){
-            currentMove++;
-            promptUpdate(currentMove);
-            tutorialText.setText("Keep the phone vertical and aimed towards you.");
-        } else{
-            Intent intent = new Intent(this, Play.class);
-            intent.putExtra(MainActivity.SONG_NAME, songName);
-            startActivity(intent);
-        }
+        next();
     }
 
+    private void next(){
+        if(songName.equals("Chicken Dance") && videoMove != 4){
+            points = 0;
+            String scoreText = "Points: " + points;
+            score.setText(scoreText);
 
-
+            videoMove++;
+            promptUpdate(videoMove);
+        } else{
+            Intent intent = new Intent(this, PostTutorial.class);
+            intent.putExtra(MainActivity.SONG_NAME, songName);
+            startActivity(intent);
+            video.stopPlayback();
+            accelerometer.deleteObservers();
+            finish();
+        }
+    }
 
     @Override
     public void update(Observable o, Object arg) {
 
        if (o instanceof Accelerometer) {
-            if ((int) arg == currentMove && currentMove != Moves.NO_MOVE){
+            if ((int) arg == currentMove || currentMove == Moves.FIST_PUMP){
                 points++;
                 if(points % 10 == 0){
                     pointMediaPlayer.start();
-                    tutorialText.setText("Completed. move on to the next");
-                    points = 0;
+                    next();
                 }
                 v.vibrate(40);
                 String scoreText = "Points: " + points;
                 score.setText(scoreText);
-            }
-            else if ((currentMove == 5 && ((int) arg == 1 || (int) arg == 2 || (int) arg == 3 || (int)arg == 4))){
-                points++;
-                if(points % 10 == 0){
-                    pointMediaPlayer.start();
-                    tutorialText.setText("Completed. move on to the next");
-                    points = 0;
-                }
-                v.vibrate(40);
-                String scoreText = "Points: " + points;
-                score.setText(scoreText);
+
             }
         }
+    }
+
+    public void onPause() {
+        super.onPause();
+        video.stopPlayback();
+        accelerometer.deleteObservers();
+        finish();
     }
 }
