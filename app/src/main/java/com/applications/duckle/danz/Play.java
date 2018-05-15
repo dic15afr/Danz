@@ -89,6 +89,14 @@ public class Play extends AppCompatActivity implements Observer{
                 video.start();
             }
         });
+        video.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+
+                mp.setVolume(0, 0);
+            }
+        });
 
         observer = new MediaObserver();
         new Thread(observer).start();
@@ -127,7 +135,7 @@ public class Play extends AppCompatActivity implements Observer{
             }
         }else if (o instanceof Accelerometer) {
             if(currentMove != Moves.NO_MOVE) {
-                if (((int) arg == currentMove || currentMove == Moves.FIST_PUMP) && mediaPlayer.isPlaying()) {
+                if (((int) arg == currentMove || currentMove == Moves.FIST_PUMP || (currentMove == Moves.UP_AND_DOWN_MOVE_2 && (int) arg == Moves.UP_AND_DOWN_MOVE)) && mediaPlayer.isPlaying()) {
                     points++;
                     if (points % 10 == 0) {
                         pointMediaPlayer.start();
@@ -153,32 +161,7 @@ public class Play extends AppCompatActivity implements Observer{
     }
 
     private void updateMove(){
-        int move;
-        switch (currentMove){
-            case 0:
-                move = 0;
-                break;
-            case 1:
-                move = R.raw.updown;
-                break;
-            case 2:
-                move = R.raw.forback;
-                break;
-            case 3:
-                move = R.raw.leftright;
-                break;
-            case 4:
-                move = R.raw.fistpump;
-                break;
-            case 5:
-                move = 5;
-                break;
-            default:
-                move = 0;
-                break;
-        }
-
-        if (move == 0){
+        if (currentMove == Moves.NO_MOVE){
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -188,7 +171,7 @@ public class Play extends AppCompatActivity implements Observer{
                     video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.white));
                 }
             });
-        }else if(move == 5) {
+        }else if(currentMove == Moves.FREESTYLE) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -199,6 +182,29 @@ public class Play extends AppCompatActivity implements Observer{
                 }
             });
         }else {
+
+            int move;
+            switch (currentMove){
+                case 1:
+                    move = R.raw.m1;
+                    break;
+                case 2:
+                    move = R.raw.m2;
+                    break;
+                case 3:
+                    move = R.raw.m3;
+                    break;
+                case 4:
+                    move = R.raw.m4;
+                    break;
+                case 5:
+                    move = R.raw.fistpump;
+                    break;
+                default:
+                    move = 0;
+                    break;
+            }
+
             final Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + move);
 
             runOnUiThread(new Runnable() {

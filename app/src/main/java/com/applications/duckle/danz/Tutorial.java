@@ -18,7 +18,7 @@ public class Tutorial extends AppCompatActivity  implements Observer{
     private TextView score, promptText;
     private VideoView video;
     private String songName;
-    private int currentMove, videoMove;
+    private int currentMove;
     private Vibrator v;
     private Accelerometer accelerometer;
     private int points = 0;
@@ -51,15 +51,15 @@ public class Tutorial extends AppCompatActivity  implements Observer{
         songName = intent.getStringExtra(MainActivity.SONG_NAME);
         switch (songName){
             case "Chicken Dance":
-                videoMove = 1;
+                currentMove = 1;
                 break;
             case "Levels":
-                videoMove = 5;
+                currentMove = 5;
                 break;
             default:
                 System.exit(0);
         }
-        promptUpdate(videoMove);
+        promptUpdate();
     }
 
 
@@ -69,18 +69,17 @@ public class Tutorial extends AppCompatActivity  implements Observer{
         score.setText(scoreText);
 
         if(songName.equals("Chicken Dance")){
-            videoMove = 1;
+            currentMove = 1;
         } else {
-            videoMove = 5;
+            currentMove = 5;
         }
-        promptUpdate(videoMove);
+        promptUpdate();
     }
 
-    private void promptUpdate(int move){
-        switch (move) {
+    private void promptUpdate(){
+        switch (currentMove) {
             case 1:
                 promptText.setText("Move your phone up and down");
-                currentMove = Moves.UP_AND_DOWN_MOVE;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -90,18 +89,15 @@ public class Tutorial extends AppCompatActivity  implements Observer{
                 break;
             case 2:
                 promptText.setText("Move your phone up and down");
-                currentMove = Moves.UP_AND_DOWN_MOVE;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.move2));
-                        video.start();
                     }
                 });
                 break;
             case 3:
                 promptText.setText("Move your phone forward and backward");
-                currentMove = Moves.FORWARD_AND_BACKWARD_MOVE;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -111,7 +107,6 @@ public class Tutorial extends AppCompatActivity  implements Observer{
                 break;
             case 4:
                 promptText.setText("Move your phone left and right");
-                currentMove = Moves.LEFT_AND_RIGHT_MOVE;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -121,7 +116,6 @@ public class Tutorial extends AppCompatActivity  implements Observer{
                 break;
             case 5:
                 promptText.setText("Pump your fist in the air!");
-                currentMove = Moves.FIST_PUMP;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -145,13 +139,13 @@ public class Tutorial extends AppCompatActivity  implements Observer{
     }
 
     private void next(){
-        if(songName.equals("Chicken Dance") && videoMove != 4){
+        if(songName.equals("Chicken Dance") && currentMove != 4){
             points = 0;
             String scoreText = "Points: " + points;
             score.setText(scoreText);
 
-            videoMove++;
-            promptUpdate(videoMove);
+            currentMove++;
+            promptUpdate();
         } else{
             Intent intent = new Intent(this, PostTutorial.class);
             intent.putExtra(MainActivity.SONG_NAME, songName);
@@ -166,7 +160,7 @@ public class Tutorial extends AppCompatActivity  implements Observer{
     public void update(Observable o, Object arg) {
 
        if (o instanceof Accelerometer) {
-            if ((int) arg == currentMove || currentMove == Moves.FIST_PUMP){
+            if ((int) arg == currentMove || currentMove == Moves.FIST_PUMP || (currentMove == Moves.UP_AND_DOWN_MOVE_2 && (int) arg == Moves.UP_AND_DOWN_MOVE)){
                 points++;
                 if(points % 10 == 0){
                     pointMediaPlayer.start();
