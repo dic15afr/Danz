@@ -197,8 +197,14 @@ public class Play extends AppCompatActivity implements Observer{
                 case 4:
                     move = R.raw.m4;
                     break;
-                case 5:
+                case Moves.FIST_PUMP:
                     move = R.raw.fistpump;
+                    break;
+                case Moves.CLAP:
+                    move = R.raw.clapm;
+                    break;
+                case Moves.WAVE:
+                    move = R.raw.wavemove;
                     break;
                 default:
                     move = 0;

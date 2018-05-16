@@ -11,5 +11,7 @@ public final class Moves {
     public static final int LEFT_AND_RIGHT_MOVE = 4;
     public static final int FIST_PUMP = 5;
     public static final int FREESTYLE = 6;
+    public static final int CLAP = 7;
+    public static final int WAVE = 8;
 
 }

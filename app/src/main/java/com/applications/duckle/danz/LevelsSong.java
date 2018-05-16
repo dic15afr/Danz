@@ -11,7 +11,7 @@ public class LevelsSong extends Observable implements Song{
     //Create the map of timings and moves
     private TreeMap<Integer, Integer> moves = createMap();
 
-    private static final int songFile = R.raw.levels;
+    private static final int songFile = R.raw.levelsshort;
 
     public static final String songName = "Levels";
 
@@ -57,7 +57,12 @@ public class LevelsSong extends Observable implements Song{
 
         result.put(0, Moves.NO_MOVE);
         result.put(7300, Moves.FIST_PUMP);
-
+        result.put(24000, Moves.CLAP);
+        result.put(38000, Moves.FIST_PUMP);
+        result.put(53500, Moves.CLAP);
+        result.put(76000, Moves.NO_MOVE);
+        result.put(84000, Moves.WAVE);
+        result.put(115000, Moves.FIST_PUMP);
         return result;
     }
 
