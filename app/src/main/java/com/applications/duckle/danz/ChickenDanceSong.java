@@ -11,7 +11,7 @@ public class ChickenDanceSong extends Observable implements Song {
     //Create the map of timings and moves
     private TreeMap<Integer, Integer> moves = createMap();
 
-    private static final int songFile = R.raw.birddance;
+    private static final int songFile = R.raw.birddanceshort;
 
     public static final String songName = "Chicken Dance";
 

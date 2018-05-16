@@ -157,30 +157,67 @@ public class Play extends AppCompatActivity implements Observer{
                 updateMove();
             }
         }else if (o instanceof Accelerometer) {
-            if(currentMove != Moves.NO_MOVE) {
-                if (((int) arg == currentMove || currentMove == Moves.FIST_PUMP || (currentMove == Moves.UP_AND_DOWN_MOVE_2 && (int) arg == Moves.UP_AND_DOWN_MOVE)) && mediaPlayer.isPlaying()) {
-                    points++;
-                    if (points % 10 == 0) {
-                        pointMediaPlayer.start();
-                    }
-                    v.vibrate(40);
-                    String scoreText = "Points: " + points;
-                    score.setText(scoreText);
-                } else if (currentMove == Moves.FREESTYLE){
-                    if(previousMove != (int) arg){
-                        previousMove = (int) arg;
-
-                        points++;
-                        if (points % 10 == 0) {
-                            pointMediaPlayer.start();
+            if(currentMove != Moves.NO_MOVE && mediaPlayer.isPlaying()) {
+                int accMove = (int) arg;
+                switch (currentMove){
+                    case Moves.CLAP:
+                        if(accMove == Moves.FORWARD_AND_BACKWARD_MOVE || accMove == Moves.LEFT_AND_RIGHT_MOVE && previousMove != Moves.UP_AND_DOWN_MOVE){
+                            successfulMove();
                         }
-                        v.vibrate(40);
-                        String scoreText = "Points: " + points;
-                        score.setText(scoreText);
-                    }
+                        break;
+                    case Moves.FIST_PUMP:
+                        if(previousMove == Moves.FORWARD_AND_BACKWARD_MOVE){
+                            if(accMove == Moves.UP_AND_DOWN_MOVE){
+                                successfulMove();
+
+                            }
+                        } else if (previousMove == Moves.UP_AND_DOWN_MOVE){
+                            if (accMove == Moves.FORWARD_AND_BACKWARD_MOVE){
+                                successfulMove();
+                            }
+                        }
+                        break;
+                    case Moves.WAVE:
+                        if(accMove == Moves.FORWARD_AND_BACKWARD_MOVE || accMove == Moves.LEFT_AND_RIGHT_MOVE && previousMove != Moves.UP_AND_DOWN_MOVE){
+                            successfulMove();
+                        }
+                        break;
+                    case Moves.UP_AND_DOWN_MOVE:
+                        if(accMove == Moves.UP_AND_DOWN_MOVE){
+                            successfulMove();
+                        }
+                        break;
+                    case Moves.LEFT_AND_RIGHT_MOVE:
+                        if(accMove == Moves.LEFT_AND_RIGHT_MOVE){
+                            successfulMove();
+                        }
+                        break;
+                    case Moves.FREESTYLE:
+                        if(previousMove != accMove){
+                            successfulMove();
+                        }
+                        break;
+                    case Moves.FORWARD_AND_BACKWARD_MOVE:
+                        if(accMove == Moves.FORWARD_AND_BACKWARD_MOVE){
+                            successfulMove();
+                        }
+                        break;
+                    default:
+                        break;
                 }
+                previousMove = accMove;
             }
         }
+    }
+
+    private void successfulMove(){
+        points++;
+        if (points % 10 == 0) {
+            pointMediaPlayer.start();
+        }
+        v.vibrate(40);
+        String scoreText = "Points: " + points;
+        score.setText(scoreText);
     }
 
     private void updateMove(){
