@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.content.Intent;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -28,6 +29,8 @@ public class Play extends AppCompatActivity implements Observer{
     private int points = 0;
     private TextView score;
     private Vibrator v;
+
+    private ImageButton imageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +67,7 @@ public class Play extends AppCompatActivity implements Observer{
         progressBar.setMax(mediaPlayer.getDuration());
 
         image = findViewById(R.id.image);
+        imageButton = findViewById(R.id.toggle_btn);
 
         video = findViewById(R.id.video);
         video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.white));
@@ -78,8 +82,9 @@ public class Play extends AppCompatActivity implements Observer{
                 image.setImageResource(R.drawable.main);
                 image.setAlpha(255);
                 progressBar.setProgress(mPlayer.getCurrentPosition());
-                findViewById(R.id.play_btn).setEnabled(false);
-                findViewById(R.id.pause_btn).setEnabled(false);
+                //findViewById(R.id.play_btn).setEnabled(false);
+                //findViewById(R.id.pause_btn).setEnabled(false);
+                imageButton.setEnabled(false);
             }
         });
 
@@ -100,6 +105,7 @@ public class Play extends AppCompatActivity implements Observer{
 
         observer = new MediaObserver();
         new Thread(observer).start();
+        togglePlay();
     }
 
     public void playBtn(View v){
@@ -123,6 +129,23 @@ public class Play extends AppCompatActivity implements Observer{
         if(mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
             video.pause();
+        }
+    }
+
+    public void playPausebtn(View v){
+        togglePlay();
+    }
+
+    public void togglePlay(){
+        if(mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+            video.pause();
+            imageButton.setImageResource(R.drawable.play);
+        } else {
+            video.start();
+            image.setImageResource(R.drawable.start);
+            mediaPlayer.start();
+            imageButton.setImageResource(R.drawable.pause);
         }
     }
 
