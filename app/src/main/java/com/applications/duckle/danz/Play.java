@@ -130,8 +130,12 @@ public class Play extends AppCompatActivity implements Observer{
             video.pause();
             imageButton.setImageResource(R.drawable.play);
         } else {
+            if(currentMove == Moves.FREESTYLE){
+                image.setImageResource(R.drawable.freestyle);
+            }else{
+                image.setImageResource(R.drawable.start);
+            }
             video.start();
-            image.setImageResource(R.drawable.start);
             mediaPlayer.start();
             imageButton.setImageResource(R.drawable.pause);
         }
@@ -230,7 +234,6 @@ public class Play extends AppCompatActivity implements Observer{
                 }
             });
         }else {
-
             int move;
             switch (currentMove){
                 case Moves.UP_AND_DOWN_MOVE:
