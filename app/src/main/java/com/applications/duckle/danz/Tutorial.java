@@ -10,19 +10,21 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.VideoView;
+import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Stack;
 
 public class Tutorial extends AppCompatActivity  implements Observer{
     private MediaPlayer pointMediaPlayer;
     private TextView score, promptText;
     private VideoView video;
     private String songName;
-    private int currentMove;
+    private int currentMove, previousMove;
     private Vibrator v;
     private Accelerometer accelerometer;
     private int points = 0;
-
+    Stack<Integer> moveList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,17 +51,22 @@ public class Tutorial extends AppCompatActivity  implements Observer{
 
         Intent intent = getIntent();
         songName = intent.getStringExtra(MainActivity.SONG_NAME);
+        moveList = new Stack<>();
+        initializeMoves();
+        promptUpdate();
+    }
+
+    public void initializeMoves(){
+        moveList.removeAllElements();
         switch (songName){
             case "Chicken Dance":
-                currentMove = 1;
+                moveList.addAll(Arrays.asList(Moves.LEFT_AND_RIGHT_MOVE, Moves.FORWARD_AND_BACKWARD_MOVE, Moves.UP_AND_DOWN_MOVE, Moves.UP_AND_DOWN_MOVE));
                 break;
             case "Levels":
-                currentMove = 5;
+                moveList.addAll(Arrays.asList( Moves.WAVE, Moves.CLAP, Moves.FIST_PUMP));
                 break;
-            default:
-                System.exit(0);
         }
-        promptUpdate();
+        currentMove = moveList.pop();
     }
 
 
@@ -68,70 +75,53 @@ public class Tutorial extends AppCompatActivity  implements Observer{
         String scoreText = "Points: " + points;
         score.setText(scoreText);
 
-        if(songName.equals("Chicken Dance")){
-            currentMove = 1;
-        } else {
-            currentMove = 5;
-        }
+        initializeMoves();
         promptUpdate();
     }
 
     private void promptUpdate(){
+        int moveClip;
         switch (currentMove) {
-            case 1:
+            case Moves.UP_AND_DOWN_MOVE:
                 promptText.setText("Move your phone up and down");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.move1));
-                    }
-                });
+                if(moveList.peek().equals(Moves.UP_AND_DOWN_MOVE)){
+                    moveClip = R.raw.chickenmove1;
+                }else{
+                    moveClip = R.raw.chickenmove2;
+                }
                 break;
-            case 2:
-                promptText.setText("Move your phone up and down");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.move2));
-                    }
-                });
-                break;
-            case 3:
+            case Moves.FORWARD_AND_BACKWARD_MOVE:
                 promptText.setText("Move your phone forward and backward");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.move3));
-                    }
-                });
+                moveClip = R.raw.chickenmove3;
                 break;
-            case 4:
-                promptText.setText("Move your phone left and right");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.move4));
-                    }
-                });
+            case Moves.LEFT_AND_RIGHT_MOVE:
+                promptText.setText("Clap!");
+                moveClip = R.raw.chickenmove4;
                 break;
-            case 5:
+            case Moves.FIST_PUMP:
                 promptText.setText("Pump your fist in the air!");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.fistpump));
-                    }
-                });
+                moveClip = R.raw.fistpump;
+                break;
+            case Moves.CLAP:
+                promptText.setText("Clap!");
+                moveClip = R.raw.clap;
+                break;
+            case Moves.WAVE:
+                promptText.setText("Wave your arms in the air!!");
+                moveClip = R.raw.wavemove;
                 break;
             default:
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        video.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.white));
-                    }
-                });
+                moveClip = R.raw.white;
                 break;
         }
+
+        final Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + moveClip);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                video.setVideoURI(uri);
+            }
+        });
     }
 
     public void nextBtn(View v){
@@ -139,14 +129,14 @@ public class Tutorial extends AppCompatActivity  implements Observer{
     }
 
     private void next(){
-        if(songName.equals("Chicken Dance") && currentMove != 4){
+        if(!moveList.empty()){
             points = 0;
             String scoreText = "Points: " + points;
             score.setText(scoreText);
 
-            currentMove++;
+            currentMove = moveList.pop();
             promptUpdate();
-        } else{
+        }else{
             Intent intent = new Intent(this, PostTutorial.class);
             intent.putExtra(MainActivity.SONG_NAME, songName);
             startActivity(intent);
@@ -159,18 +149,60 @@ public class Tutorial extends AppCompatActivity  implements Observer{
     @Override
     public void update(Observable o, Object arg) {
 
-       if (o instanceof Accelerometer) {
-            if ((int) arg == currentMove || currentMove == Moves.FIST_PUMP || (currentMove == Moves.UP_AND_DOWN_MOVE_2 && (int) arg == Moves.UP_AND_DOWN_MOVE)){
-                points++;
-                if(points % 10 == 0){
-                    pointMediaPlayer.start();
-                    next();
+        int accMove = (int) arg;
+        switch (currentMove){
+            case Moves.CLAP:
+                if((accMove == Moves.FORWARD_AND_BACKWARD_MOVE || accMove == Moves.LEFT_AND_RIGHT_MOVE) && previousMove != Moves.UP_AND_DOWN_MOVE){
+                    successfulMove();
                 }
-                v.vibrate(40);
-                String scoreText = "Points: " + points;
-                score.setText(scoreText);
+                break;
+            case Moves.FIST_PUMP:
+                if(previousMove == Moves.FORWARD_AND_BACKWARD_MOVE || previousMove == Moves.LEFT_AND_RIGHT_MOVE){
+                    if(accMove == Moves.UP_AND_DOWN_MOVE){
+                        successfulMove();
 
-            }
+                    }
+                } else if (previousMove == Moves.UP_AND_DOWN_MOVE){
+                    if (accMove == Moves.FORWARD_AND_BACKWARD_MOVE || accMove == Moves.LEFT_AND_RIGHT_MOVE){
+                        successfulMove();
+                    }
+                }
+                break;
+            case Moves.WAVE:
+                if((accMove == Moves.FORWARD_AND_BACKWARD_MOVE || accMove == Moves.LEFT_AND_RIGHT_MOVE) && previousMove != Moves.UP_AND_DOWN_MOVE){
+                    successfulMove();
+                }
+                break;
+            case Moves.UP_AND_DOWN_MOVE:
+                if(accMove == Moves.UP_AND_DOWN_MOVE){
+                    successfulMove();
+                }
+                break;
+            case Moves.LEFT_AND_RIGHT_MOVE:
+                if(accMove == Moves.LEFT_AND_RIGHT_MOVE || accMove == Moves.FORWARD_AND_BACKWARD_MOVE){
+                    successfulMove();
+                }
+                break;
+            case Moves.FORWARD_AND_BACKWARD_MOVE:
+                if(accMove == Moves.FORWARD_AND_BACKWARD_MOVE || accMove == Moves.LEFT_AND_RIGHT_MOVE){
+                    successfulMove();
+                }
+                break;
+            default:
+                return;
+        }
+        previousMove = accMove;
+    }
+
+    private void successfulMove(){
+        points++;
+        v.vibrate(40);
+        String scoreText = "Points: " + points;
+        score.setText(scoreText);
+
+        if(points % 10 == 0){
+            pointMediaPlayer.start();
+            next();
         }
     }
 

@@ -26,9 +26,11 @@
         android:id="@+id/replay_button"
         android:layout_width="79dp"
         android:layout_height="60dp"
-        android:layout_marginStart="88dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginEnd="150dp"
+        android:layout_marginRight="150dp"
+        android:layout_marginTop="24dp"
         android:onClick="replayBtn"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_score"
         app:srcCompat="@android:drawable/ic_media_rew" />
@@ -37,19 +39,19 @@
         android:id="@+id/next_button"
         android:layout_width="78dp"
         android:layout_height="60dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginLeft="150dp"
+        android:layout_marginStart="150dp"
+        android:layout_marginTop="24dp"
         android:onClick="nextBtn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/replay_button"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_score"
         app:srcCompat="@android:drawable/ic_media_play" />
 
     <TextView
         android:id="@+id/text_score"
-        android:layout_width="232dp"
-        android:layout_height="66dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -62,7 +64,7 @@
 
     <TextView
         android:id="@+id/text_prompt"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -76,8 +78,8 @@
 
     <VideoView
         android:id="@+id/videoView"
-        android:layout_width="358dp"
-        android:layout_height="320dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

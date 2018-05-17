@@ -1,5 +1,6 @@
 package com.applications.duckle.danz;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -82,9 +83,11 @@ public class Play extends AppCompatActivity implements Observer{
                 image.setImageResource(R.drawable.main);
                 image.setAlpha(255);
                 progressBar.setProgress(mPlayer.getCurrentPosition());
-                //findViewById(R.id.play_btn).setEnabled(false);
-                //findViewById(R.id.pause_btn).setEnabled(false);
                 imageButton.setEnabled(false);
+                imageButton.animate().alpha(0);
+                ObjectAnimator animation = ObjectAnimator.ofFloat(findViewById(R.id.stop_btn), "translationX", 150f);
+                animation.setDuration(500);
+                animation.start();
             }
         });
 
@@ -108,14 +111,6 @@ public class Play extends AppCompatActivity implements Observer{
         togglePlay();
     }
 
-    public void playBtn(View v){
-        if(!mediaPlayer.isPlaying()){
-            video.start();
-            image.setImageResource(R.drawable.start);
-        }
-        mediaPlayer.start();
-    }
-
     public void stopBtn(View v){
         mediaPlayer.stop();
         observer.stop();
@@ -125,14 +120,7 @@ public class Play extends AppCompatActivity implements Observer{
         finish();
     }
 
-    public void pauseBtn(View v){
-        if(mediaPlayer.isPlaying()) {
-            mediaPlayer.pause();
-            video.pause();
-        }
-    }
-
-    public void playPausebtn(View v){
+    public void playPauseBtn(View v){
         togglePlay();
     }
 
@@ -161,24 +149,24 @@ public class Play extends AppCompatActivity implements Observer{
                 int accMove = (int) arg;
                 switch (currentMove){
                     case Moves.CLAP:
-                        if(accMove == Moves.FORWARD_AND_BACKWARD_MOVE || accMove == Moves.LEFT_AND_RIGHT_MOVE && previousMove != Moves.UP_AND_DOWN_MOVE){
+                        if((accMove == Moves.FORWARD_AND_BACKWARD_MOVE || accMove == Moves.LEFT_AND_RIGHT_MOVE) && previousMove != Moves.UP_AND_DOWN_MOVE){
                             successfulMove();
                         }
                         break;
                     case Moves.FIST_PUMP:
-                        if(previousMove == Moves.FORWARD_AND_BACKWARD_MOVE){
+                        if(previousMove == Moves.FORWARD_AND_BACKWARD_MOVE || previousMove == Moves.LEFT_AND_RIGHT_MOVE){
                             if(accMove == Moves.UP_AND_DOWN_MOVE){
                                 successfulMove();
 
                             }
                         } else if (previousMove == Moves.UP_AND_DOWN_MOVE){
-                            if (accMove == Moves.FORWARD_AND_BACKWARD_MOVE){
+                            if (accMove == Moves.FORWARD_AND_BACKWARD_MOVE || accMove == Moves.LEFT_AND_RIGHT_MOVE){
                                 successfulMove();
                             }
                         }
                         break;
                     case Moves.WAVE:
-                        if(accMove == Moves.FORWARD_AND_BACKWARD_MOVE || accMove == Moves.LEFT_AND_RIGHT_MOVE && previousMove != Moves.UP_AND_DOWN_MOVE){
+                        if((accMove == Moves.FORWARD_AND_BACKWARD_MOVE || accMove == Moves.LEFT_AND_RIGHT_MOVE) && previousMove != Moves.UP_AND_DOWN_MOVE){
                             successfulMove();
                         }
                         break;
@@ -188,7 +176,7 @@ public class Play extends AppCompatActivity implements Observer{
                         }
                         break;
                     case Moves.LEFT_AND_RIGHT_MOVE:
-                        if(accMove == Moves.LEFT_AND_RIGHT_MOVE){
+                        if(accMove == Moves.LEFT_AND_RIGHT_MOVE || accMove == Moves.FORWARD_AND_BACKWARD_MOVE){
                             successfulMove();
                         }
                         break;
@@ -198,12 +186,12 @@ public class Play extends AppCompatActivity implements Observer{
                         }
                         break;
                     case Moves.FORWARD_AND_BACKWARD_MOVE:
-                        if(accMove == Moves.FORWARD_AND_BACKWARD_MOVE){
+                        if(accMove == Moves.FORWARD_AND_BACKWARD_MOVE || accMove == Moves.LEFT_AND_RIGHT_MOVE){
                             successfulMove();
                         }
                         break;
                     default:
-                        break;
+                        return;
                 }
                 previousMove = accMove;
             }
@@ -245,30 +233,20 @@ public class Play extends AppCompatActivity implements Observer{
 
             int move;
             switch (currentMove){
-                case 1:
-                    move = R.raw.m1;
-                    break;
-                case 2:
-                    move = R.raw.m2;
-                    break;
-                case 3:
-                    move = R.raw.m3;
-                    break;
-                case 4:
-                    move = R.raw.m4;
+                case Moves.UP_AND_DOWN_MOVE:
+                    move = R.raw.allchickenmoves;
                     break;
                 case Moves.FIST_PUMP:
                     move = R.raw.fistpump;
                     break;
                 case Moves.CLAP:
-                    move = R.raw.clapm;
+                    move = R.raw.clap;
                     break;
                 case Moves.WAVE:
                     move = R.raw.wavemove;
                     break;
                 default:
-                    move = 0;
-                    break;
+                    return;
             }
 
             final Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + move);
