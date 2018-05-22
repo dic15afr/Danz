@@ -11,20 +11,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" />
+        <activity android:name=".MainActivity" android:screenOrientation="portrait"/>
         <activity
             android:name=".SplashScreen"
-            android:theme="@style/SplashTheme">
+            android:theme="@style/SplashTheme"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Play" />
-        <activity android:name=".Tutorial" />
-        <activity android:name=".PreTutorial" />
-        <activity android:name=".PostTutorial"></activity>
+        <activity android:name=".Play" android:screenOrientation="portrait"/>
+        <activity android:name=".Tutorial" android:screenOrientation="portrait"/>
+        <activity android:name=".PreTutorial" android:screenOrientation="portrait"/>
+        <activity android:name=".PostTutorial" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

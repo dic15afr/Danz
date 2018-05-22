@@ -4,12 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:keepScreenOn="true"
     tools:context=".MainActivity">
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="384dp"
-        android:layout_height="422dp"
+        android:layout_height="359dp"
         android:layout_gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,7 +21,7 @@
         android:id="@+id/play"
         style="@style/Widget.AppCompat.Button"
         android:layout_width="0dp"
-        android:layout_height="72dp"
+        android:layout_height="71dp"
         android:layout_marginTop="8dp"
         android:background="@color/colorAccent"
         android:onClick="play"
