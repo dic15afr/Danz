@@ -153,7 +153,7 @@ public class Play extends AppCompatActivity implements Observer{
                 int accMove = (int) arg;
                 switch (currentMove){
                     case Moves.CLAP:
-                        if((accMove == Moves.FORWARD_AND_BACKWARD_MOVE || accMove == Moves.LEFT_AND_RIGHT_MOVE) && previousMove != Moves.UP_AND_DOWN_MOVE){
+                        if((accMove == Moves.FORWARD_AND_BACKWARD_MOVE && previousMove == Moves.FORWARD_AND_BACKWARD_MOVE) || (accMove == Moves.LEFT_AND_RIGHT_MOVE && previousMove == Moves.LEFT_AND_RIGHT_MOVE)){
                             successfulMove();
                         }
                         break;
@@ -170,7 +170,7 @@ public class Play extends AppCompatActivity implements Observer{
                         }
                         break;
                     case Moves.WAVE:
-                        if((accMove == Moves.FORWARD_AND_BACKWARD_MOVE || accMove == Moves.LEFT_AND_RIGHT_MOVE) && previousMove != Moves.UP_AND_DOWN_MOVE){
+                        if((accMove == Moves.FORWARD_AND_BACKWARD_MOVE && previousMove == Moves.FORWARD_AND_BACKWARD_MOVE) || (accMove == Moves.LEFT_AND_RIGHT_MOVE && previousMove == Moves.LEFT_AND_RIGHT_MOVE)){
                             successfulMove();
                         }
                         break;
@@ -180,7 +180,7 @@ public class Play extends AppCompatActivity implements Observer{
                         }
                         break;
                     case Moves.LEFT_AND_RIGHT_MOVE:
-                        if(accMove == Moves.LEFT_AND_RIGHT_MOVE || accMove == Moves.FORWARD_AND_BACKWARD_MOVE){
+                        if((accMove == Moves.LEFT_AND_RIGHT_MOVE && previousMove == Moves.LEFT_AND_RIGHT_MOVE) || (accMove == Moves.FORWARD_AND_BACKWARD_MOVE && previousMove == Moves.FORWARD_AND_BACKWARD_MOVE)){
                             successfulMove();
                         }
                         break;
@@ -190,7 +190,7 @@ public class Play extends AppCompatActivity implements Observer{
                         }
                         break;
                     case Moves.FORWARD_AND_BACKWARD_MOVE:
-                        if(accMove == Moves.FORWARD_AND_BACKWARD_MOVE || accMove == Moves.LEFT_AND_RIGHT_MOVE){
+                        if((accMove == Moves.FORWARD_AND_BACKWARD_MOVE && previousMove == Moves.FORWARD_AND_BACKWARD_MOVE) || (accMove == Moves.LEFT_AND_RIGHT_MOVE && previousMove == Moves.LEFT_AND_RIGHT_MOVE)){
                             successfulMove();
                         }
                         break;
